@@ -11,10 +11,10 @@ using std::max;
 using std::vector;
 
 struct DisjointSetsElement {
-	int size, parent, rank;
+	int size, parent, rank, requested;
 
-	DisjointSetsElement(int size = 0, int parent = -1, int rank = 0):
-	    size(size), parent(parent), rank(rank) {}
+	DisjointSetsElement(int size = 0, int parent = -1, int rank = 0, int requested = -1):
+	    size(size), parent(parent), rank(rank), requested(requested) {}
 };
 
 struct DisjointSets {
@@ -31,7 +31,7 @@ struct DisjointSets {
 		// find parent and compress path
 		if (table != sets[table].parent)
 		{
-			sets[table].parent = getParent(sets[table].parent)
+			sets[table].parent = getParent(sets[table].parent);
 		}
 
 		return sets[table].parent;
@@ -40,13 +40,37 @@ struct DisjointSets {
 	void merge(int destination, int source) {
 		int realDestination = getParent(destination);
 		int realSource = getParent(source);
-		if (realDestination != realSource) {
-			// merge two components
-			// use union by rank heuristic
-      // update max_table_size
 
+		// if realDestination != realSource
+		// Copy all rows from realSource to realDestination
+		// clear source and put symlink to x
 
+		if (realDestination == realSource)
+			return;
+
+		// Does destination indeed have higher rank than source?
+		if (sets[realDestination].rank >= sets[realSource].rank)
+		{
+			sets[realDestination].size += sets[realSource].size;
+			sets[realSource].parent = realDestination;
+
+			if (sets[realDestination].rank == sets[realSource].rank)
+			{
+				sets[realDestination].rank += 1;
+			}
+
+			max_table_size = max(max_table_size, sets[realDestination].size);
 		}
+		else
+		{
+			// Merge based on rank heuristic, save requested destination
+			sets[realSource].size += sets[realDestination].size;
+			sets[realDestination].parent = realSource;
+			sets[realDestination].requested = realSource;
+
+			max_table_size = max(max_table_size, sets[realSource].size);
+		}
+
 	}
 };
 
