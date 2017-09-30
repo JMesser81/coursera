@@ -26,37 +26,46 @@ int main() {
     std::string text;
     getline(std::cin, text);
 
-    std::stack <Bracket> opening_brackets_stack;
+    std::stack <Bracket> brackets_stack;
     for (int position = 0; position < text.length(); ++position) {
-        char next = text[position];
+        char current_bracket = text[position];
 
-        if (next == '(' || next == '[' || next == '{') {
-            Bracket opener(next, position+1);
-            opening_brackets_stack.push(opener);
-        }
+        if (current_bracket == '(' || current_bracket == '[' || current_bracket == '{') {
+            Bracket opener(current_bracket, position+1);
+            brackets_stack.push(opener);
+        } else if (current_bracket == ')' || current_bracket == ']' || current_bracket == '}') {
 
-        if (next == ')' || next == ']' || next == '}') {
-            // Process closing bracket, write your code here
-            Bracket test = opening_brackets_stack.top();
-            if (test.Matchc(next))
+            // This is an error, push the non-matching "closer" element and break
+            if (brackets_stack.empty())
             {
-                opening_brackets_stack.pop();
+              Bracket closer(current_bracket, position+1);
+              brackets_stack.push(closer);
+              break;
+            }
+
+            Bracket test = brackets_stack.top();
+            if (test.Matchc(current_bracket))
+            {
+                brackets_stack.pop();
             }
             else
             {
+                // This is an error, push the non-matching "closer" and then break
+                Bracket closer(current_bracket, position+1);
+                brackets_stack.push(closer);
                 break;
             }
         }
     }
 
     // Printing answer, write your code here
-    if (opening_brackets_stack.empty())
+    if (brackets_stack.empty())
     {
         std::cout << "Success" << std::endl;
     }
     else
     {
-        Bracket nonmatching = opening_brackets_stack.top();
+        Bracket nonmatching = brackets_stack.top();
         std::cout << nonmatching.position << std::endl;
     }
     return 0;

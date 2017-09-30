@@ -3,6 +3,8 @@
 #include <algorithm>
 
 using std::vector;
+using std::pair;
+using std::make_pair;
 using std::cin;
 using std::cout;
 
@@ -31,10 +33,21 @@ class JobQueue {
   }
 
   void AssignJobs() {
+
+    vector<long long> next_free_time(num_workers_, 0);
+    assigned_workers_.resize(num_workers_);
+
+    for (int i = 0; i < jobs_.size(); ++i)
+    {
+      // Check for free thread
+      assigned_workers_<
+    }
+
     // TODO: replace this code with a faster algorithm.
     assigned_workers_.resize(jobs_.size());
     start_times_.resize(jobs_.size());
-    vector<long long> next_free_time(num_workers_, 0);
+
+
     for (int i = 0; i < jobs_.size(); ++i) {
       int duration = jobs_[i];
       int next_worker = 0;
@@ -46,6 +59,7 @@ class JobQueue {
       start_times_[i] = next_free_time[next_worker];
       next_free_time[next_worker] += duration;
     }
+
   }
 
  public:

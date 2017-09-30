@@ -29,15 +29,46 @@ class HeapBuilder {
       cin >> data_[i];
   }
 
+  void SiftDown(int index)
+  {
+    int minIndex = index;
+    int leftChildIndex = (2*index) + 1;
+    int rightChildIndex = (2*index) + 2;
+
+    if (leftChildIndex < data_.size() && data_[leftChildIndex] < data_[minIndex])
+    {
+      minIndex = leftChildIndex;
+    }
+
+    if (rightChildIndex < data_.size() && data_[rightChildIndex] < data_[minIndex])
+    {
+      minIndex = rightChildIndex;
+    }
+
+    if (index != minIndex)
+    {
+      swap(data_[index], data_[minIndex]);
+      swaps_.push_back(make_pair(index, minIndex));
+      SiftDown(minIndex);
+    }
+  }
+
   void GenerateSwaps() {
     swaps_.clear();
-    // The following naive implementation just sorts 
+    // The following naive implementation just sorts
     // the given sequence using selection sort algorithm
     // and saves the resulting sequence of swaps.
-    // This turns the given array into a heap, 
+    // This turns the given array into a heap,
     // but in the worst case gives a quadratic number of swaps.
     //
+
+    for (int i = data_.size() / 2; i >= 0; --i)
+    {
+      SiftDown(i);
+    }
+
     // TODO: replace by a more efficient implementation
+    /*
     for (int i = 0; i < data_.size(); ++i)
       for (int j = i + 1; j < data_.size(); ++j) {
         if (data_[i] > data_[j]) {
@@ -45,6 +76,7 @@ class HeapBuilder {
           swaps_.push_back(make_pair(i, j));
         }
       }
+    */
   }
 
  public:
