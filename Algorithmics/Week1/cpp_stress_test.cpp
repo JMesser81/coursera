@@ -37,7 +37,7 @@ long long MaxPairwiseProductFast(const vector<int>& numbers) {
 
 int main() {
   while (true) {
-    int n = rand() % 10 + 2;
+    int n = rand() % 1000 + 2;
     cout << n << "\n";
     vector<int> a;
     for (int i = 0; i < n; ++i) {

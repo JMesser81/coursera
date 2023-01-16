@@ -1,6 +1,8 @@
 #include <iostream>
 #include <cassert>
 
+const unsigned long long MAX = 20000;
+
 int gcd_euclid(int a, int b)
 {
   int r = 0;
@@ -37,13 +39,26 @@ long long lcm_naive(int a, int b) {
 
 void test_solution() {
     assert(lcm_optimized(6, 8) == 24);
-    assert(lcm_optimized(28851538, 1183019) == 1933053046LL);
+    assert(lcm_optimized(761457, 614573) == 467970912861ULL);
+    assert(lcm_optimized(28851538ULL, 1183019ULL) == 1933053046ULL);
+
+    for (int i = 0; i < 100; i++) {
+      unsigned long long a,b;
+      a = rand() % MAX;
+      b = rand() % MAX;
+      assert(lcm_optimized(a, b)==lcm_naive(a, b));
+   }
+
+    std::cout << "Success!" << "\n";
 }
 
 int main() {
+  
+  /*
   int a, b;
   std::cin >> a >> b;
   std::cout << lcm_optimized(a, b) << std::endl;
-  //test_solution();
+  */
+ test_solution();
   return 0;
 }

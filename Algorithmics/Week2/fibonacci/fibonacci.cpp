@@ -14,45 +14,43 @@
 // 5. Remove the call to test_solution, uncomment the line with a call to fibonacci_fast (and the lines reading the input),
 //    and submit it to the grader.
 
-int fibonacci_naive(int n) {
+long long fibonacci_naive(int n) {
     if (n <= 1)
         return n;
 
     return fibonacci_naive(n - 1) + fibonacci_naive(n - 2);
 }
 
-int fibonacci_fast(int n) {
-    // write your code here
-    if (n <= 1)
+long long fibonacci_fast(int n) {
+    // iterative solution
+
+    if (n == 0)
+      return 0;
+    else if (n == 1)
+      return 1;
+    
+    long long temp_fib = 1L;
+    long long temp_fib_n_1 = 0L;
+    long long temp_fib_n_2 = 1L;
+    for (int i = 2; i < n; ++i)
     {
-      return n;
+      temp_fib_n_1 = temp_fib_n_2;
+      temp_fib_n_2 = temp_fib;
+      temp_fib = temp_fib_n_1 + temp_fib_n_2;
     }
 
-    int fibseries[n];
-
-    fibseries[0] = 1;
-    fibseries[1] = 1;
-
-    for (int i = 2; i < n; i++)
-    {
-      fibseries[i] = fibseries[i-2] + fibseries[i-1];
-    }
-    return fibseries[n-1];;
+    return temp_fib;
 }
 
 void test_solution() {
     assert(fibonacci_fast(3) == 2);
     assert(fibonacci_fast(10) == 55);
-    for (int n = 0; n < 20; ++n) {
-      //std::cout << "Testing at n = " << n << std::endl;
-      assert(fibonacci_fast(n) == fibonacci_naive(n));
-    }
-
-
+    for (int n = 0; n < 20; ++n)
+        assert(fibonacci_fast(n) == fibonacci_naive(n));
 }
 
 int main() {
-    int n = 0;
+    int n;
     std::cin >> n;
 
     //std::cout << fibonacci_naive(n) << '\n';
