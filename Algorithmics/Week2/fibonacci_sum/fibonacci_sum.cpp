@@ -1,7 +1,9 @@
 #include <iostream>
 #include <cassert>
 
-const unsigned long long MAX = 100000000000000; // 10^14
+const unsigned long long MAX = 100000000000000ULL;
+const int PISANO_PERIOD_LENGTH_MOD10 = 60;
+const int MODULO = 10;
 
 unsigned long long fibonacci_sum_naive(unsigned long long n) {
     if (n <= 1)
@@ -23,7 +25,6 @@ unsigned long long fibonacci_sum_naive(unsigned long long n) {
 }
 
 unsigned long long fibonacci_fast(unsigned long long n) {
-    // iterative solution
 
     if (n == 0)
       return 0;
@@ -33,28 +34,25 @@ unsigned long long fibonacci_fast(unsigned long long n) {
     unsigned long long temp_fib = 1L;
     unsigned long long temp_fib_n_1 = 0L;
     unsigned long long temp_fib_n_2 = 1L;
+
     for (unsigned long long i = 2; i < n; ++i)
     {
       temp_fib_n_1 = temp_fib_n_2;
       temp_fib_n_2 = temp_fib;
-      temp_fib = (temp_fib_n_1 + temp_fib_n_2) % 10;
-      
-      /*          832564823476
-      if ( (i % 10000000000) == 0) {
-        std::cout << "Still alive... i = " << i << std::endl;
-      }
-      */
+      temp_fib = (temp_fib_n_1 + temp_fib_n_2);
     }
 
-    //std::cout << temp_fib << std::endl;
     return temp_fib;
 }
 
 unsigned long long fibonacci_sum_fast(unsigned long long n)
 {
     //return ((2*fibonacci_fast(n) + fibonacci_fast(n-1)) - 1) % 10;
-    std::cout << "Calling fibonacci_fast for n + 2 = " << n+2 << std::endl;
-    return (fibonacci_fast(n+2) - 1) % 10;
+    //std::cout << "Calling fibonacci_fast for n + 2 = " << n+2 << std::endl;
+    //return (fibonacci_fast(n+2) - 1) % 10;
+
+    int r = n % PISANO_PERIOD_LENGTH_MOD10;
+    return (fibonacci_fast(r+2) - 1) % MODULO;
 }
 
 void test_solution()
@@ -83,9 +81,10 @@ void test_solution()
 int main() {
 
     //test_solution();
-
-    long long n = 0;
+    unsigned long long n = 0;
     std::cin >> n;
-    //std::cout << fibonacci_sum_naive(n) << std::endl;
+    assert(n >= 0);
+    assert(n <= MAX);
+
     std::cout << fibonacci_sum_fast(n) << std::endl;
 }
